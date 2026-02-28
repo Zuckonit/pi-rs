@@ -11,8 +11,18 @@ pub struct ToolSchema {
     pub required: Vec<String>,
 }
 
+impl ToolSchema {
+    pub fn from_json(schema: serde_json::Value) -> Self {
+        Self {
+            r#type: "object".to_string(),
+            properties: schema,
+            required: vec![],
+        }
+    }
+}
+
 /// Tool call from LLM
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ToolCall {
     pub id: String,
     pub name: String,
@@ -60,7 +70,7 @@ impl ToolResult {
     }
 }
 
-/// Tool definition
+/// Tool definition - synchronous version
 #[derive(Debug, Clone)]
 pub struct Tool {
     pub name: String,
@@ -82,5 +92,50 @@ impl Tool {
             schema,
             execute,
         }
+    }
+}
+
+/// Tool trait for async execution
+pub trait ToolTrait: Send + Sync {
+    fn name(&self) -> &str;
+    fn description(&self) -> &str;
+    fn schema(&self) -> &ToolSchema;
+    fn execute(&self, args: serde_json::Value, cwd: &str) -> Result<ToolResult>;
+}
+
+/// Wrapper to convert sync Tool to trait object
+pub struct ToolWrapper {
+    name: String,
+    description: String,
+    schema: ToolSchema,
+    execute: fn(serde_json::Value, &str) -> Result<ToolResult>,
+}
+
+impl ToolWrapper {
+    pub fn from_tool(tool: Tool) -> Self {
+        Self {
+            name: tool.name,
+            description: tool.description,
+            schema: tool.schema,
+            execute: tool.execute,
+        }
+    }
+}
+
+impl ToolTrait for ToolWrapper {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn description(&self) -> &str {
+        &self.description
+    }
+
+    fn schema(&self) -> &ToolSchema {
+        &self.schema
+    }
+
+    fn execute(&self, args: serde_json::Value, cwd: &str) -> Result<ToolResult> {
+        (self.execute)(args, cwd)
     }
 }
