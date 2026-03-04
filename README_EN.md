@@ -2,7 +2,6 @@
 
 English | [中文](README.md)
 
-[![Rust](https://github.com/badlogic/pi-mono/actions/workflows/rust.yml/badge.svg)](https://github.com/badlogic/pi-mono/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A terminal AI coding assistant written in Rust, inspired by [pi-coding-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent). Provides an interactive TUI interface with support for multiple LLM providers.

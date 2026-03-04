@@ -2,7 +2,6 @@
 
 [English](README_EN.md) | 中文
 
-[![Rust](https://github.com/badlogic/pi-mono/actions/workflows/rust.yml/badge.svg)](https://github.com/badlogic/pi-mono/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 一款用 Rust 编写的终端 AI 编程助手，灵感来自 [pi-coding-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent)。提供交互式 TUI 界面，支持多种 LLM 提供商。
