@@ -162,7 +162,6 @@ my-skill/
 }
 ```
 
-<<<<<<< HEAD
 ### content.md
 
 Contains the system prompt that is prepended to the conversation when the skill is triggered.
