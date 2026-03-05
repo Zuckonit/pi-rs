@@ -2,4 +2,4 @@
 
 pub mod loader;
 
-pub use loader::{Skill, SkillLoader};
+pub use loader::SkillLoader;

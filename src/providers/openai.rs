@@ -209,6 +209,7 @@ impl Provider for OpenAIProvider {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
+#[allow(dead_code)]
 struct OpenAIResponse {
     id: String,
     object: String,

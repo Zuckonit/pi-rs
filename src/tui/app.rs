@@ -295,6 +295,6 @@ fn render_app(
     let input_width = (chunks[2].width as usize).saturating_sub(2);
     if input.len() < input_width {
         let cursor_x = (input.len() as u16) + 1;
-        f.set_cursor(cursor_x, chunks[2].y + 1);
+        f.set_cursor_position((cursor_x, chunks[2].y + 1));
     }
 }

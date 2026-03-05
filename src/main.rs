@@ -16,6 +16,7 @@ mod extensions;
 mod utils;
 mod agent;
 mod skills;
+mod sandbox;
 
 use cli::Args;
 use cli::interactive::InteractiveMode;
@@ -31,6 +32,68 @@ use skills::SkillLoader;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Parse arguments
     let args = Args::parse();
+
+    // Handle sandbox mode
+    if let Some(project_path) = args.sandbox {
+        
+        use sandbox::{Sandbox, SandboxConfig};
+
+        // Load config from project directory if exists
+        let config = SandboxConfig::load_from_cwd(&std::path::Path::new(&project_path))?;
+
+        // Check if sandbox should be enabled
+        let enabled = args.no_sandbox == false;
+
+        if !enabled && !config.enabled {
+            // No sandbox requested, continue with normal execution
+        } else if enabled {
+            // Validate -v without --sandbox is handled by clap (requires = "sandbox")
+
+            // Build sandbox
+            let mut sandbox = Sandbox::new(std::path::PathBuf::from(&project_path));
+
+            // Add mounts from CLI
+            for mount in &args.sandbox_mounts {
+                sandbox.mounts.push(std::path::PathBuf::from(mount));
+            }
+
+            // Add mounts from config
+            for mount in &config.mounts {
+                sandbox.mounts.push(std::path::PathBuf::from(mount));
+            }
+
+            // Add env vars from CLI (format: KEY=VALUE)
+            for env in &args.sandbox_env {
+                if let Some((key, value)) = env.split_once('=') {
+                    sandbox.env_vars.insert(key.to_string(), value.to_string());
+                }
+            }
+
+            // Add env vars from config
+            for (key, value) in &config.env {
+                sandbox.env_vars.insert(key.clone(), value.clone());
+            }
+
+            // Set sandbox type
+            let sandbox_type = args.sandbox_type.unwrap_or(config.r#type);
+            sandbox.sandbox_type = sandbox_type;
+
+            // Add auto-propagated env vars
+            sandbox.add_auto_propagated_env_vars();
+
+            // Launch sandbox
+            match sandbox.launch() {
+                Ok(_) => {},
+                Err(e) => {
+                    eprintln!("Error launching sandbox: {}", e);
+                    std::process::exit(1);
+                }
+            }
+
+            // If we get here, sandbox exited
+            return Ok(());
+        }
+    }
 
     // Get current directory
     let cwd = std::env::current_dir()

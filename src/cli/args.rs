@@ -103,6 +103,26 @@ pub struct Args {
     #[arg(long = "verbose")]
     pub verbose: bool,
 
+    /// Enable sandbox mode with specified project path
+    #[arg(long = "sandbox", value_name = "PROJECT_PATH")]
+    pub sandbox: Option<String>,
+
+    /// Additional mount paths in sandbox (requires --sandbox)
+    #[arg(long = "sandbox-mount", value_name = "PATH", requires = "sandbox")]
+    pub sandbox_mounts: Vec<String>,
+
+    /// Environment variables in sandbox (requires --sandbox, format: KEY=VALUE)
+    #[arg(long = "sandbox-env", value_name = "KEY=VALUE", requires = "sandbox")]
+    pub sandbox_env: Vec<String>,
+
+    /// Sandbox type (default: epkg)
+    #[arg(long = "sandbox-type", value_name = "TYPE", requires = "sandbox")]
+    pub sandbox_type: Option<String>,
+
+    /// Disable sandbox (override config file)
+    #[arg(long = "no-sandbox", requires = "sandbox")]
+    pub no_sandbox: bool,
+
     /// Files to include (prefix with @)
     #[arg()]
     pub files: Vec<String>,

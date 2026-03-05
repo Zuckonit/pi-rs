@@ -98,15 +98,13 @@ fn grep(
     let regex =
         Regex::new(&pattern).map_err(|e| PiError::Tool(format!("Invalid regex pattern: {}", e)))?;
 
-    let mut results: Vec<String> = Vec::new();
-
-    if target.is_file() {
-        results = grep_file(&target, &regex)?;
+    let results = if target.is_file() {
+        grep_file(&target, &regex)?
     } else if target.is_dir() {
-        results = grep_directory(&target, &regex, max)?;
+        grep_directory(&target, &regex, max)?
     } else {
         return Err(PiError::Tool(format!("Path not found: {}", path)));
-    }
+    };
 
     if results.is_empty() {
         return Ok(ToolResult::success("No matches found".to_string()));
