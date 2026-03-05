@@ -120,16 +120,13 @@ impl EventBus {
 
     pub fn subscribe(&self, event_type: EventType, listener: EventListener) {
         let mut listeners = self.listeners.write().unwrap();
-        listeners
-            .entry(event_type)
-            .or_default()
-            .push(listener);
+        listeners.entry(event_type).or_default().push(listener);
     }
 
     pub fn unsubscribe(&self, event_type: &EventType, listener: &EventListener) {
         let mut listeners = self.listeners.write().unwrap();
         if let Some(listeners_vec) = listeners.get_mut(event_type) {
-            listeners_vec.retain(|l| Arc::as_ptr(l) != Arc::as_ptr(listener));
+            listeners_vec.retain(|l| !std::ptr::addr_eq(Arc::as_ptr(l), Arc::as_ptr(listener)));
         }
     }
 

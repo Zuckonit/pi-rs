@@ -71,8 +71,8 @@ Options:
       --theme <PATH>         Load theme
   -p, --print               Print mode (non-interactive)
       --sandbox <PATH>        Enable sandbox mode (project path required)
-      --sandbox-mount <PATH>  Additional mount paths (requires --sandbox)
-      --sandbox-env <VAR>     Sandbox env vars (format: KEY=VALUE, requires --sandbox)
+  -v                        Additional mount paths (requires --sandbox)
+  -E                        Sandbox env vars (requires --sandbox)
       --sandbox-type <TYPE>  Sandbox type (default: epkg)
       --no-sandbox           Disable sandbox (override config file)
   -h, --help               Print help
@@ -163,11 +163,11 @@ Run in an isolated sandbox environment to protect the host system.
 # Enable sandbox (project path required)
 pi-rs --sandbox /my/project
 
-# With additional mounts (like docker -v)
+# With additional mounts
 pi-rs --sandbox /my/project -v /opt/epkg -v /data
 
 # With environment variables
-pi-rs --sandbox /my/project -e CUSTOM_VAR=value
+pi-rs --sandbox /my/project -E CUSTOM_VAR=value
 
 # Specify sandbox type (default: epkg)
 pi-rs --sandbox /my/project --sandbox-type epkg

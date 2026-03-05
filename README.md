@@ -71,8 +71,8 @@ pi [OPTIONS] [MESSAGE] [FILES]...
       --theme <路径>         加载主题
   -p, --print               打印模式（非交互式）
       --sandbox <路径>        启用沙箱模式（必需指定项目路径）
-      --sandbox-mount <路径>  沙箱额外挂载目录（需要 --sandbox）
-      --sandbox-env <变量>   沙箱环境变量（格式：KEY=VALUE，需要 --sandbox）
+  -v                        沙箱额外挂载目录（需要 --sandbox）
+  -E                        沙箱环境变量（需要 --sandbox）
       --sandbox-type <类型>  沙箱类型（默认：epkg）
       --no-sandbox           禁用沙箱（覆盖配置文件）
   -h, --help               打印帮助信息
@@ -161,11 +161,11 @@ my-skill/
 # 启用沙箱（必需指定项目路径）
 pi-rs --sandbox /my/project
 
-# 带额外挂载目录（类似 docker -v）
+# 带额外挂载目录
 pi-rs --sandbox /my/project -v /opt/epkg -v /data
 
 # 带环境变量
-pi-rs --sandbox /my/project -e CUSTOM_VAR=value
+pi-rs --sandbox /my/project -E CUSTOM_VAR=value
 
 # 指定沙箱类型（默认：epkg）
 pi-rs --sandbox /my/project --sandbox-type epkg

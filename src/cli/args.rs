@@ -107,12 +107,22 @@ pub struct Args {
     #[arg(long = "sandbox", value_name = "PROJECT_PATH")]
     pub sandbox: Option<String>,
 
-    /// Additional mount paths in sandbox (requires --sandbox)
-    #[arg(long = "sandbox-mount", value_name = "PATH", requires = "sandbox")]
+    /// Additional mount paths in sandbox (requires --sandbox, short: -v)
+    #[arg(
+        short = 'v',
+        long = "sandbox-mount",
+        value_name = "PATH",
+        requires = "sandbox"
+    )]
     pub sandbox_mounts: Vec<String>,
 
-    /// Environment variables in sandbox (requires --sandbox, format: KEY=VALUE)
-    #[arg(long = "sandbox-env", value_name = "KEY=VALUE", requires = "sandbox")]
+    /// Environment variables in sandbox (requires --sandbox, format: KEY=VALUE, short: -E)
+    #[arg(
+        short = 'E',
+        long = "sandbox-env",
+        value_name = "KEY=VALUE",
+        requires = "sandbox"
+    )]
     pub sandbox_env: Vec<String>,
 
     /// Sandbox type (default: epkg)
